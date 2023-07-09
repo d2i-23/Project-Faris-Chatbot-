@@ -16,7 +16,7 @@ def generateVoice(text, sentiment = None):
     audioConfig = speechsdk.audio.AudioOutputConfig(filename= f"RRCode\\audioResult\\{token}.wav")
     #audioConfig.set_property(speechsdk.PropertyId.SpeechServiceResponse_RequestSynthesisOutputFormat, speechsdk.OutputFormat.Riff24Khz16BitMonoPcm)
     ssmlString = f"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'><voice name='en-US-AshleyNeural'><prosody pitch='+20%' rate = '+5%'>{text}</prosody></voice></speak>"
-
+    #ssmlString = f"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='zh-CN'><voice name='zh-CN-XiaochenNeural'><prosody pitch='+20%' rate = '+5%'>{text}</prosody></voice></speak>"
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audioConfig)
 
 
@@ -29,4 +29,3 @@ def generateVoice(text, sentiment = None):
     return token, length
 
 
-generateVoice("hello my name is Faris")

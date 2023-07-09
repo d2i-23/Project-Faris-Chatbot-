@@ -139,7 +139,7 @@ textarea:focus {
 }
 
 #chat::-webkit-scrollbar-thumb:hover{
-  background-color: pink;
+  background-color: #454543;
 }
 
 #chatEnter{

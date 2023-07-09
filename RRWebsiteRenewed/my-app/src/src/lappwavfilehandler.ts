@@ -7,7 +7,7 @@
 
 import { LAppPal } from './lapppal';
 
-export let s_instance: LAppWavFileHandler = null;
+export let s_instance: LAppWavFileHandler = null
 
 export class LAppWavFileHandler {
   /**
@@ -85,7 +85,7 @@ export class LAppWavFileHandler {
     return true;
   }
 
-  public start(filePath: string): void {
+  public start(filePath: string, audioElement: HTMLAudioElement): void {
     // サンプル位参照位置を初期化
     this._sampleOffset = 0;
     this._userTimeSeconds = 0.0;
@@ -93,7 +93,7 @@ export class LAppWavFileHandler {
     // RMS値をリセット
     this._lastRms = 0.0;
 
-    if (!this.loadWavFile(filePath)) {
+    if (!this.loadWavFile(filePath, audioElement)) {
       return;
     }
   }
@@ -101,10 +101,9 @@ export class LAppWavFileHandler {
   public getRms(): number {
     return this._lastRms;
   }
-
-  public loadWavFile(filePath: string): boolean {
+  
+  public loadWavFile(filePath: string, audioElement: HTMLAudioElement): boolean {
     let ret = false;
-
     if (this._pcmData != null) {
       this.releasePcmData();
     }
@@ -122,11 +121,11 @@ export class LAppWavFileHandler {
         },
         body: JSON.stringify({'delete': true, 'token': filePath})
         }
-
+      
       return fetch('/audioBeg', request)
       .then(responce => responce.arrayBuffer())
       .then(arrayBuffer => {
-        const audioElement = new Audio
+        //const audioElement = new Audio
         const wavFile = new Blob( [arrayBuffer], {type: "audio/wav"})
         audioElement.src = URL.createObjectURL(wavFile)
         audioElement.play()

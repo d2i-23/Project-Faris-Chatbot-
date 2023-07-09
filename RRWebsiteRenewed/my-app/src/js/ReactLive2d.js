@@ -33,6 +33,7 @@ function ReactLive2d(props) {
     const [previousSave, newSave] = useState('')
     const [previousSaveMood, newSaveMood] = useState('')
     const [previousSaveTime, newSaveTime] = useState(0)
+    const [currentAudio, newAudio] = useState(new Audio)
 
     if (props.token !== previousSave){
         newSave(props.token)
@@ -47,8 +48,9 @@ function ReactLive2d(props) {
             if (previousSaveMood != 'exp_01'){
                 LAppDelegate.getInstance().setExpression(previousSaveMood)
             }
-
-            LAppDelegate.getInstance().testing(previousSave)
+            
+            currentAudio.pause()
+            LAppDelegate.getInstance().audio(previousSave, currentAudio)
 
 
             if (previousSaveMood != 'exp_01'){
@@ -62,6 +64,7 @@ function ReactLive2d(props) {
         }
     }, [previousSave, previousSaveMood, previousSaveTime])
 
+    useEffect(() => {}, [currentAudio])
 
 
     useEffect(() =>{

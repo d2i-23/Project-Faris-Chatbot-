@@ -171,9 +171,9 @@ export class LAppView {
     }
   }
   //! custom function
-  public ConfigureAudio(path: string): void{
+  public ConfigureAudio(path: string, audioElement: HTMLAudioElement): void{
     const live2DManager: LAppLive2DManager = LAppLive2DManager.getInstance();
-    live2DManager.onSpeak(path)
+    live2DManager.onSpeak(path, audioElement)
   }
 
   public setExpression(id: string): void{

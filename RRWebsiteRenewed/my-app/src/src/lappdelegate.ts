@@ -118,8 +118,8 @@ export class LAppDelegate {
     return true;
   }
   //! Test log here
-  public testing(path: string): void{
-    LAppDelegate.getInstance()._view.ConfigureAudio(path)
+  public audio(path: string, audioElement: HTMLAudioElement): void{
+    LAppDelegate.getInstance()._view.ConfigureAudio(path, audioElement)
   }
 
   public setExpression(id: string): void{

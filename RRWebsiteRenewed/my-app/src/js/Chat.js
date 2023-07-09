@@ -1,5 +1,5 @@
 import '../css/Chat.css';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import DOMPurify from 'dompurify';
 import ReactLive2d from './ReactLive2d';
 
@@ -15,7 +15,8 @@ function Chat(){
   const [message, addKey] = useState('');
   const [active, isActive] = useState(false);
   const [realMessage, needResponse] = useState(false)
- 
+  const chatboxRef = useRef(null)
+  
   const setMessage = (event) => {
     event.preventDefault();
     const date = new Date();
@@ -31,6 +32,7 @@ function Chat(){
     
     addKey('');
     document.getElementById('messageBox').value = '';
+    document.getElementById('messageBox').style.height = '20px'
 
     needResponse(true);
     //console.log(chatHTML);
@@ -51,7 +53,7 @@ function Chat(){
         this.style.height = height + 'px'
       }
       else{
-        this.style.height = '75px'
+        this.style.height = 'fit-content'
       }
     })
 
@@ -66,10 +68,12 @@ function Chat(){
         },
         body: JSON.stringify(chatHTML[chatHTML.length - 1]),
       }
-      );
+      )
 
-      const message = await response.json();
+      const message = await response.json()
       update2([...assistantHTML, message])
+      const chat = document.getElementById('chat')
+      
   };
   } 
 
@@ -77,10 +81,10 @@ function Chat(){
     if (realMessage){
       postData();
       needResponse(false);
-
+      chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight
     } }, [chatHTML]);
 
-  useEffect(() => {}, [assistantHTML])
+  useEffect(() => {chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight}, [assistantHTML])
   
 
 
@@ -97,7 +101,7 @@ function Chat(){
 
           </form>
           <div id = 'chatBorderTop'>
-          <div id = 'chat'>  
+          <div id = 'chat' ref = {chatboxRef}>  
             {chatHTML.map((items, index) => (
             <div class = "chatDialogue">
               <div class = "timeStampInclude">{chatHTML[index]['date']} | {chatHTML[index]['time']}

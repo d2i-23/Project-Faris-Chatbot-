@@ -127,9 +127,9 @@ export class LAppLive2DManager {
   }
 
   //! Custom function here
-  public onSpeak(path: string): void{
+  public onSpeak(path: string, audioElement: HTMLAudioElement): void{
     for (let i = 0; i < this._models.getSize(); i++) {
-      this._models.at(i).startSpeaking(path)
+      this._models.at(i).startSpeaking(path, audioElement)
     }
   }
 

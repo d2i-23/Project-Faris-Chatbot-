@@ -5,27 +5,10 @@ import numpy as np
 from math import sqrt
 import os 
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-
+from secrets import token_hex
+from datetime import datetime 
 
 openai.api_key = GptToken
-
-
-# Example dummy function hard coded to return the same weather
-# In production, this could be your backend API or an external API
-
-
-#? Contain a short-term embed that stores memory inside RAM and when the conversation changed topic or the ai got closed
-#? The RAM stored memory will summarize itself and store itself to the actual log 
-#! if you run into RAM problems, store them inside a folder for shortterm specifically and gets cleared with each period 
-
-#* First step is to make an embed main class that is responsible for two things: embedding data and translating translate embedded data
-#* Second step is to make a subclass that is responsible for containing short term data, summarizing the group of data (with each iteration that is added), and summarize itself and classify 
-#* itself to a topic 
-#* Thirdly, create a function that is able to tell when the topic has changed (likely by detecting whether the cosine similarity reaches a certain point  )
-#? Sort the similarity score (higher score means more in common)
-
-#! considering saving the data inside a spreadsheet and process it with polars (pandas may be too slow for this)
-#! Pair all memories in the short term memory together and summarize it (including the input message) before presenting it to chatgpt 
 
 #Learn how to switch topics
 
@@ -75,19 +58,21 @@ class ShortTermMemory(Embedding):
         self.count = 1
         self.shortrecall = shortMemory
 
-    def evaluateLog(self):
-        self.idCount = len(os.listdir('RRcode/memoryLogs'))
+    def setMemoryList(self, memoryList):
+        self.memoryList = memoryList
+
+    def evaluateTime(self):
+        return datetime.now().strftime('%H%M-%Y%m%d')
 
     def appendMessage(self, message):
-        
         self.memoryList.append(message)
+        
         self.adjustSituation()
     
     def adjustSituation(self):
         if len(self.memoryList) > self.shortrecall:
-            wordLengths = len(self.memoryList[0]['content'])
+            #wordLengths = len(self.memoryList[0]['content'])
             
-            self.storeMemory(self.memoryList[0])
             del self.memoryList[0]
             
             #* AI stores the most recent 6 dialogues and with each 7th, the one at the start will be categorized into the longterm memory
@@ -95,20 +80,23 @@ class ShortTermMemory(Embedding):
     def includeResponse(self, response):
         self.memoryList[-1]["role2"] = "assistant"  
         self.memoryList[-1]["content2"] = response
+        self.storeMemory(self.memoryList[-1])
   
     def storeMemory(self, memory):
         '''
-        self.idCount += 1
-        memory['id'] = self.idCount
+        name = self.evaluateTime() + token_hex(16)
+        memory['key'] = name 
+        print(name)
 
-        with open(f'RRCode/memoryLogs/{self.idCount}.json', 'w') as f:
+        with open(f'RRcode/memoryLogs/{name}.json', 'w') as f:
             f.write(json.dumps(memory))
         '''
         pass
+
     def returnMemory(self):
         return self.memoryList 
         
-'''
+
 class LongTermMemory(Embedding):
     def __init__(self, recall = 5, exactness = 0.85):
         self.recall = recall
@@ -129,10 +117,12 @@ class LongTermMemory(Embedding):
         messageList = list(map(lambda x: openJsonFile(os.path.join('RRcode', 'memoryLogs', x[0])), messageList[:self.recall]))
     
         return messageList
-'''
+
+
 
 def createMessage(ShortMemory, LongMemory, current):
-    personality = {'role': "system", "content": 'Your name is Faris, an AI developped by the person called d2i-23. You act like an ordinary girl, and speak at most 3 sentences.'} #You speak at most 3 sentences. You add Nyaa~ at the end of each sentence
+    personality = {'role': "system", "content": 'Your name is Faris, an AI developped by the person called d2i-23. You act energetically but you can easily get pissed off. You often speak at most 3 sentences unless necessary for the topic. You do not act like an assistant.'} #You speak at most 3 sentences. You add Nyaa~ at the end of each sentence
+    #personality = {'role': "system", "content": "你的名字是叫小青。你是个平常的小姑娘。你般的很可爱。 你只说不多个三个句子。"}
     messageList = [personality]
 
     for i in LongMemory +  ShortMemory:
@@ -152,17 +142,15 @@ def sentiment(text):
     if scores['neu'] > 0.65:
         return 'exp_01'
     else: 
-        return 'exp_08' if scores['neg'] > scores['pos'] else 'exp_02'
+        return 'exp_08' if scores['neg'] > 0.15 else 'exp_02'
 
-
+memory = ShortTermMemory(6)
+#longMemory = LongTermMemory(recall = 2)
 
 def runConversation(messageInput):   
     # Step 1: send the conversation and available functions to GPT
-
-    memory = ShortTermMemory(3)
-    #longMemory = LongTermMemory(recall = 1)
-
-    memory.evaluateLog()
+    
+    memory.evaluateTime()
     
     message = memory.embed(messageInput)
     shortTermMemory = memory.returnMemory()
@@ -177,12 +165,11 @@ def runConversation(messageInput):
     memory.appendMessage(message)
     memory.includeResponse(response['choices'][0]['message']["content"])
 
+    #print([personality, {'role': 'user', 'content': memories + "user" + message['content']}])
     
     return response['choices'][0]['message']["content"]
 
-
-#Step 1: Make the ai be able to recall recent conversation topics 
-#Embed each input 
+#! long term memory is disabled for being too slow 
 '''
 while True:
     print(runConversation(input("User: ")))
