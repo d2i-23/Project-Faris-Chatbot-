@@ -86,7 +86,9 @@
 				"ParamMouthE",
 				"ParamMouthO",
 				"ParamMouthUp",
-				"ParamMouthDown"
+				"ParamMouthDown",
+				"ParamMouthAngry",
+				"ParamMouthAngryLine"
 			]
 		}
 	],

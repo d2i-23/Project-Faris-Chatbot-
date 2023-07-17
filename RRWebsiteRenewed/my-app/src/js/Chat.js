@@ -17,10 +17,12 @@ function Chat(){
   const [realMessage, needResponse] = useState(false)
   const chatboxRef = useRef(null)
   
-  const setMessage = (event) => {
-    event.preventDefault();
-    const date = new Date();
+  const setMessage = (event = null) => {
 
+    if (event !== null){
+      event.preventDefault();
+    }
+    const date = new Date();
     var dictionary = {'date': `${date.getMonth()}/${date.getDate()}`, 
                       'time': `${date.getHours()}:${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`, 
                       'year': `${date.getFullYear()}`,
@@ -40,24 +42,42 @@ function Chat(){
   }
 
   const addKeyStroke = (event) => {
-
+  
     isActive(true);
     setTimeout(() => {isActive(false);}, 500); // Adjust the delay duration as needed
+
+
     addKey(event.target.value);
     const messageBox = document.getElementById('messageBox');
     messageBox.addEventListener('input', function() {
+      
       this.style.height = 'auto'; // Reset the height to auto
       var height = this.scrollHeight;
-
+  
       if (height < 75){
         this.style.height = height + 'px'
       }
       else{
-        this.style.height = 'fit-content'
+        //this.style.height = 'fit-content'
+        this.style.height = '75px'
       }
     })
 
   }
+  
+  const detectEnter = (event) => {
+    if (event.key === "Enter"){
+      console.log('here')
+      if (event.shiftKey == false){
+        event.preventDefault()
+        setMessage()
+      }
+      else{
+        event.target.value += '\n'
+      }
+    }
+  }
+
 
   const postData = async () => {
     if (chatHTML.length !== 0){
@@ -72,10 +92,33 @@ function Chat(){
 
       const message = await response.json()
       update2([...assistantHTML, message])
-      const chat = document.getElementById('chat')
       
   };
   } 
+
+
+
+  const processLength = (text, id) => {
+    if (text.length <= 200){
+      return (<h3>{text}</h3>)
+    }
+
+    else{
+      return (<h3 >{text.substring(0, 175) + '...'}<a id = {`buttonID${id}`}class = 'readMore'>Read More</a></h3>)
+    }
+  }
+  /*
+  document.getElementsByClassName('readMore').addEventListener('click', function(){
+    index = Number.parseInt(this.id.substring(9, this.id.substring.length - 1))
+
+    document.getElementById('overallContainer').appendChild(
+      <PopUp trigger = {true} setTrigger = {}>
+      {}
+      </PopUp>
+    )
+  })
+  */
+
 
   useEffect(() => {
     if (realMessage){
@@ -87,17 +130,16 @@ function Chat(){
   useEffect(() => {chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight}, [assistantHTML])
   
 
-
   return (
 
     <div class = "overallContainer"> 
       
       <div class = 'chatBox'>
           <br></br>
-          <form onSubmit = {setMessage} onChange = {addKeyStroke}>
+          <form onSubmit = {setMessage} >
             <button id = 'chatEnter' type = 'submit'>>>></button>
             <br/>
-            <textarea class = {active ? 'active' : ''} type = "text" id = 'messageBox'></textarea>
+            <textarea class = {active ? 'active' : ''} onChange = {addKeyStroke} onKeyDown = {detectEnter}type = "text" id = 'messageBox' ></textarea>
 
           </form>
           <div id = 'chatBorderTop'>
@@ -105,7 +147,7 @@ function Chat(){
             {chatHTML.map((items, index) => (
             <div class = "chatDialogue">
               <div class = "timeStampInclude">{chatHTML[index]['date']} | {chatHTML[index]['time']}
-               <div class = "chatLogUser"><h3>{chatHTML[index]['message']}</h3></div>
+               <div class = "chatLogUser">{processLength(chatHTML[index]['message'], index)}</div>
               </div>
               <div class = "chatDialogue reply">
                 <div class = "chatLogAssistant"><h3>{assistantHTML[index] !== undefined  ? assistantHTML[index]['message'] : 

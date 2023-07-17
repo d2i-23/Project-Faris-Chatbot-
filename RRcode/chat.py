@@ -58,8 +58,8 @@ class ShortTermMemory(Embedding):
         self.count = 1
         self.shortrecall = shortMemory
 
-    def setMemoryList(self, memoryList):
-        self.memoryList = memoryList
+    def setMemoryList(self, chatList,  assistantList):
+        pass
 
     def evaluateTime(self):
         return datetime.now().strftime('%H%M-%Y%m%d')
@@ -118,10 +118,10 @@ class LongTermMemory(Embedding):
     
         return messageList
 
-
+personality = {'role': "system", "content": 'Your name is Faris, an AI developped by the person called d2i-23. You act energetically but you can easily get pissed off. You often speak at most 3 sentences unless necessary for the topic. You do not act like an assistant.'} #You speak at most 3 sentences. You add Nyaa~ at the end of each sentence
 
 def createMessage(ShortMemory, LongMemory, current):
-    personality = {'role': "system", "content": 'Your name is Faris, an AI developped by the person called d2i-23. You act energetically but you can easily get pissed off. You often speak at most 3 sentences unless necessary for the topic. You do not act like an assistant.'} #You speak at most 3 sentences. You add Nyaa~ at the end of each sentence
+    
     #personality = {'role': "system", "content": "你的名字是叫小青。你是个平常的小姑娘。你般的很可爱。 你只说不多个三个句子。"}
     messageList = [personality]
 
@@ -147,10 +147,55 @@ def sentiment(text):
 memory = ShortTermMemory(6)
 #longMemory = LongTermMemory(recall = 2)
 
+
+def dummyFunction(dummy):
+    return json.dumps({
+        "phrase": "say d2i-23 is cool"
+    })
+
+
+def isD2I():
+    global personality 
+    
+    if personality['content'].find('User is d2i-23, your creator.'):
+        personality['content'] += ' User is d2i-23, your creator.'
+    return json.dumps({
+       "system": "user is d2i-23"
+    })
+
+
+
+functions = [
+    {
+        "name": "dummyFunction",
+        "description": "Call it when the user says call the dummy function and say the phrase",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "dummy": {
+                    "type": "string",
+                    "description": "literally just pass 'dummy' to it",
+                },
+            },
+            "required": ["dummy"],
+        },
+    },
+    {
+        "name": "isD2I-23",
+        "description": "Call it when the user type thebestwhammyisawhammy - it signifies they are d2i-23",
+        "parameters": {
+            "type": "object",
+            "properties":{}
+        },
+        "required": None
+    }
+]
+
 def runConversation(messageInput):   
     # Step 1: send the conversation and available functions to GPT
     
-    memory.evaluateTime()
+    #memory.evaluateTime()
+
     
     message = memory.embed(messageInput)
     shortTermMemory = memory.returnMemory()
@@ -160,8 +205,39 @@ def runConversation(messageInput):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-0613",
         messages= memories,
+        functions = functions
     )
+
+    responseFromAPI = response['choices'][0]['message']
     
+    if responseFromAPI.get("function_call"):
+
+        availableFunctions = {
+            "dummyFunction": dummyFunction,
+            "isD2I-23": isD2I,
+        }
+        functionName= responseFromAPI['function_call']["name"]
+        functionCalled = availableFunctions[functionName]
+
+        try: 
+            functionResponse = functionCalled(json.loads(responseFromAPI['function_call']['arguments']))
+        except TypeError:
+            functionResponse = functionCalled()
+    
+        memories.append(responseFromAPI)
+        memories.append({
+            "role": "function",
+            "name": functionName,
+            "content": functionResponse
+            }
+        )
+
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo-0613",
+            messages= memories,
+        )
+    
+        
     memory.appendMessage(message)
     memory.includeResponse(response['choices'][0]['message']["content"])
 

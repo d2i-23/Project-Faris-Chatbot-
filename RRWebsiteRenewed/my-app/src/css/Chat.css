@@ -66,7 +66,7 @@ form{
 }
  
 textarea{
-  min-height:10px;
+  min-height: 30px;
   width: fill;
   border: solid transparent;
   border-bottom: solid 1px #646669;
@@ -75,6 +75,7 @@ textarea{
   outline: transparent;
   resize: none;
   transition: border-bottom-color 1s cubic-bezier(0.41, 2.2, 0.63, -0.1);
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 textarea.active{
@@ -325,4 +326,13 @@ h3{
   height: 90vh; 
   width: 50%;
   background-color: transparent;
+}
+
+a.readMore{
+  color: lightblue;
+}
+
+a.readMore:hover{
+  color: pink; 
+  border-bottom: 1px solid white; 
 }

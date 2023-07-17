@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file, after_this_request
+from flask import Flask, request, jsonify, send_file
 from chat import runConversation, sentiment
 import os
 from voice import generateVoice
