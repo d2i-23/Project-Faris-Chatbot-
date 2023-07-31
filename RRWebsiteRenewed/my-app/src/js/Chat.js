@@ -2,6 +2,7 @@ import '../css/Chat.css';
 import {useState, useEffect, useRef} from 'react';
 import DOMPurify from 'dompurify';
 import ReactLive2d from './ReactLive2d';
+import ChatMessage from './ChatMessage';
 
 
 // Initialization code for Live2DCubismFramework
@@ -67,7 +68,6 @@ function Chat(){
   
   const detectEnter = (event) => {
     if (event.key === "Enter"){
-      console.log('here')
       if (event.shiftKey == false){
         event.preventDefault()
         setMessage()
@@ -97,16 +97,6 @@ function Chat(){
   } 
 
 
-
-  const processLength = (text, id) => {
-    if (text.length <= 200){
-      return (<h3>{text}</h3>)
-    }
-
-    else{
-      return (<h3 >{text.substring(0, 175) + '...'}<a id = {`buttonID${id}`}class = 'readMore'>Read More</a></h3>)
-    }
-  }
   /*
   document.getElementsByClassName('readMore').addEventListener('click', function(){
     index = Number.parseInt(this.id.substring(9, this.id.substring.length - 1))
@@ -118,6 +108,12 @@ function Chat(){
     )
   })
   */
+
+  const processEnter = (child) => {
+    child = DOMPurify.sanitize(child)
+
+    return <h3 dangerouslySetInnerHTML={{__html: child.replace(/\n/g, '<br />')}}></h3>
+  }
 
 
   useEffect(() => {
@@ -137,9 +133,9 @@ function Chat(){
       <div class = 'chatBox'>
           <br></br>
           <form onSubmit = {setMessage} >
-            <button id = 'chatEnter' type = 'submit'>>>></button>
+            {chatHTML.length == assistantHTML.length ? <button id = 'chatEnter' type = 'submit'>>>></button> : <button id = 'fakeEnter' type = 'button'>...</button>}
             <br/>
-            <textarea class = {active ? 'active' : ''} onChange = {addKeyStroke} onKeyDown = {detectEnter}type = "text" id = 'messageBox' ></textarea>
+            <textarea class = {active ? 'active' : ''} onChange = {addKeyStroke} onKeyDown = {detectEnter}type = "text" id = 'messageBox' ></textarea> 
 
           </form>
           <div id = 'chatBorderTop'>
@@ -147,17 +143,18 @@ function Chat(){
             {chatHTML.map((items, index) => (
             <div class = "chatDialogue">
               <div class = "timeStampInclude">{chatHTML[index]['date']} | {chatHTML[index]['time']}
-               <div class = "chatLogUser">{processLength(chatHTML[index]['message'], index)}</div>
+              <ChatMessage user = {true} realChild = {chatHTML[index]['message']}></ChatMessage>
               </div>
               <div class = "chatDialogue reply">
-                <div class = "chatLogAssistant"><h3>{assistantHTML[index] !== undefined  ? assistantHTML[index]['message'] : 
-                (<div class = "dotContainer">
+              {assistantHTML[index] !== undefined  ? <ChatMessage user = {false} realChild = {assistantHTML[index]['message']}></ChatMessage> : 
+                <div class = "chatLogAssistant">
+                <div class = "dotContainer">
                   <div id = "dot1"></div>
                   <div id = "dot2"></div>
                   <div id = "dot3"></div>
-                </div>)
+                </div>
                 
-                }</h3></div>
+                </div>}
               </div>
             </div> ))}
           </div>

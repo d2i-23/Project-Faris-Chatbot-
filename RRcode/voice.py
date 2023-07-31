@@ -4,9 +4,46 @@ from secrets import token_hex
 import wave 
 
 
+def processCode(text):
+    currentText:str = text
+    locations = []
+    index = currentText.find('```')
+    coordinates = []
+
+    while index != -1:
+
+        if len(coordinates) == 0: 
+            coordinates.append(index + (len(text) - len(currentText)))
+
+        else:
+            coordinates.append(index + (len(text) - len(currentText) + 2))
+            locations.append((coordinates[0], coordinates[1]))
+
+            coordinates = []
+
+        currentText = currentText[index + 1:]
+        index = currentText.find('```')
+    
+    
+    textLocations = []
+    previousEnd = 0
+
+    if len(locations) == 0:
+        return text
+    
+    else:
+
+        for i1, i2 in locations:
+            textLocations.append(text[previousEnd:i1])
+            previousEnd = i2 + 1
+
+        textLocations.append(text[previousEnd: ])
+
+    return ''.join(textLocations)
+
 
 def generateVoice(text, sentiment = None):
-
+    
     service_region = "canadacentral"
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
     speech_config.speech_synthesis_voice_name = ""
@@ -27,5 +64,4 @@ def generateVoice(text, sentiment = None):
         length =  wave_file.getnframes() / float(wave_file.getframerate())
     
     return token, length
-
 

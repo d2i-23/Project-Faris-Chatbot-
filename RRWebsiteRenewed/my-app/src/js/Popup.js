@@ -6,8 +6,9 @@ function PopUp(props){
         event.stopPropagation();
       };
 
+
     return ((props.trigger) ? (<div class = "oddBox" onClick={() => {props.setTrigger(false)}}> 
-        <center><div class = "oddBoxInner" onClick = {handleChildClick}>
+        <center><div class = "oddBoxInner" style = {{borderColor: props.Color != undefined ? props.Color : '#454440'}} onClick = {handleChildClick}>
         {props.children}    
         </div></center>
     </div>) : "");
