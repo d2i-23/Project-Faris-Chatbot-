@@ -251,8 +251,10 @@ def runConversation(messageInput:str, sentMemories = None):
     
     return response['choices'][0]['message']["content"] #, memory.returnMemory()
 
-#! long term memory is disabled for being too slow 
+#! long term memory is disabled for being too slow
+'''
 
 while True:
     print(runConversation(input("User: ")))
     print('\n')
+'''
