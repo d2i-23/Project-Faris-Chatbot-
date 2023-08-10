@@ -6,9 +6,10 @@ RR project for the system containing Faris. Faris Is an AI chatbot powered by Ch
 * New ai model (the current one is one of the default models from Live2D)
 * Memory System (as in refering to conversations in the past)
 
-Preview of Website
+Preview of Website:
 
-![image](https://github.com/d2i-23/RR/assets/122646162/0f479852-1a8a-47d5-ab08-11235f67f0f2)
+
+![image](https://github.com/d2i-23/RR-Project-Faris-Chatbot-/assets/122646162/a670fd8e-dbcd-4506-8785-1d86ec4698a4)
 
 
 
