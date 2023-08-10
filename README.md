@@ -8,6 +8,7 @@ Faris Is an AI chatbot powered by ChatGPT 3.5 and Live2D Web SDK paired with the
 
 Preview of Website
 
-![image](https://github.com/d2i-23/RR/assets/122646162/ec37921a-255b-4a3a-96cd-bbfae31224f7)
+![image](https://github.com/d2i-23/RR/assets/122646162/0f479852-1a8a-47d5-ab08-11235f67f0f2)
+
 
 
