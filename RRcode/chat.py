@@ -249,7 +249,7 @@ def runConversation(messageInput:str, sentMemories = None):
 
     #print([personality, {'role': 'user', 'content': memories + "user" + message['content']}])
     
-    return response['choices'][0]['message']["content"] #, memory.returnMemory()
+    return response['choices'][0]['message']["content"] , memory.returnMemory()
 
 #! long term memory is disabled for being too slow
 '''
