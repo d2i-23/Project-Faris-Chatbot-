@@ -15,18 +15,18 @@ def returnResponse():
 
     if request.method == "POST":
         form = request.get_json()
-    try: 
-        response = runConversation(form['message'])
-        if response != '':
-            
-            processedResponse = processCode(response)
-            token, length = generateVoice(processedResponse)
-            feeling = sentiment(processedResponse)
-            return jsonify({'message': response, 'token': token, 'mood': feeling, 'time': length}), 200
+    #try: 
+    response, memory = runConversation(form['message'], form['sentMemory'])
+    if response != '':
+        
+        processedResponse = processCode(response)
+        token, length = generateVoice(processedResponse)
+        feeling = sentiment(processedResponse)
+        return jsonify({'response': [{'message': response, 'token': token, 'mood': feeling, 'time': length}], 'sentMemory': memory}), 200
 
-    except: 
-        token, length = generateVoice('what?')
-        return jsonify({'message': 'what?', 'token': token, 'mood': 'exp_05', 'time': length}), 200
+    #except: 
+        #token, length = generateVoice('what?')
+        #return jsonify({'response': [{'message': 'what?', 'token': token, 'mood': 'exp_05', 'time': length}, form['sentMemory']], 'sentMemory': form['sentMemory']}), 200
 
 
 @app.route('/Resources', methods=['POST'])

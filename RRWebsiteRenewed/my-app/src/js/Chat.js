@@ -11,12 +11,15 @@ function Chat(){
   //const [message, addMessage] = useState([])
 
   //let messageList = [];
+  const [sentMemory, updateMemory] = useState([])
   const[chatHTML, update] = useState([]);
   const[assistantHTML, update2] = useState([]);
   const [message, addKey] = useState('');
   const [active, isActive] = useState(false);
   const [realMessage, needResponse] = useState(false)
   const chatboxRef = useRef(null)
+
+  useEffect(() => {console.log('here'); console.log(sentMemory)}, [sentMemory])
   
   const setMessage = (event = null) => {
 
@@ -68,7 +71,7 @@ function Chat(){
   
   const detectEnter = (event) => {
     if (event.key === "Enter"){
-      if (event.shiftKey == false){
+      if (event.shiftKey == false && chatHTML.length == assistantHTML.length){
         event.preventDefault()
         setMessage()
       }
@@ -80,18 +83,22 @@ function Chat(){
 
 
   const postData = async () => {
+    let savedJson = chatHTML[chatHTML.length - 1]
+    savedJson['sentMemory'] = sentMemory
+
     if (chatHTML.length !== 0){
       const response = await fetch('/returnResponse', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(chatHTML[chatHTML.length - 1]),
+        body: JSON.stringify(savedJson),
       }
       )
 
       const message = await response.json()
-      update2([...assistantHTML, message])
+      update2([...assistantHTML, message['response'][0]])
+      updateMemory(message['sentMemory']) 
       
   };
   } 

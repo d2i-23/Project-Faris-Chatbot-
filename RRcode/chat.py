@@ -8,6 +8,8 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from secrets import token_hex
 from datetime import datetime 
 
+#from search import searchGoogle
+
 openai.api_key = GptToken
 
 #Learn how to switch topics
@@ -93,6 +95,7 @@ class ShortTermMemory(Embedding):
         '''
         pass
 
+
     def returnMemory(self):
         return self.memoryList 
         
@@ -157,8 +160,9 @@ def dummyFunction(dummy):
 def isD2I():
     global personality 
     
-    if personality['content'].find('User is d2i-23, your creator.'):
+    if personality['content'].find('User is d2i-23, your creator.') == -1:
         personality['content'] += ' User is d2i-23, your creator.'
+    
     return json.dumps({
        "system": "user is d2i-23"
     })
@@ -188,19 +192,21 @@ functions = [
             "properties":{}
         },
         "required": None
-    }
+    },
+
 ]
 
-def runConversation(messageInput):   
+def runConversation(messageInput:str, sentMemories = None):   
     # Step 1: send the conversation and available functions to GPT
     
-    #memory.evaluateTime()
+    #memory.evaluateTime()a
 
-    
     message = memory.embed(messageInput)
-    shortTermMemory = memory.returnMemory()
+    shortTermMemory = sentMemories if sentMemories != None else memory.returnMemory()
     #longTermMemory = longMemory.searchMostCompatable(message)
+
     memories = createMessage(shortTermMemory, [], message)
+
 
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-0613",
@@ -243,11 +249,10 @@ def runConversation(messageInput):
 
     #print([personality, {'role': 'user', 'content': memories + "user" + message['content']}])
     
-    return response['choices'][0]['message']["content"]
+    return response['choices'][0]['message']["content"] #, memory.returnMemory()
 
 #! long term memory is disabled for being too slow 
-'''
+
 while True:
     print(runConversation(input("User: ")))
     print('\n')
-'''
