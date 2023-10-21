@@ -573,7 +573,7 @@ export class LAppModel extends CubismUserModel {
       this._wavFileHandler.update(deltaTimeSeconds);
       value = this._wavFileHandler.getRms();
       for (let i = 0; i < this._lipSyncIds.getSize(); ++i) {
-        this._model.addParameterValueById(this._lipSyncIds.at(i), value, 1.5);
+        this._model.addParameterValueById(this._lipSyncIds.at(i), value, 2); //1.5
       }
     }
 

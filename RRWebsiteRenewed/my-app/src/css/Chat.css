@@ -39,16 +39,16 @@
 
 .chatBox{
   height: fit-content;
-  width: 25%;
-  background: #1f211f;
-  position: relative;
-  border: solid 1px #454440;
+  width: 75vh;
+  position: absolute;
   display: flex;
   flex-direction: column-reverse;
   border-radius: 20px;
   z-index: 100;
-  padding-top: 20px;
+  top: 20%;
+
 }
+
 
 .inputSection{
   position: absolute;
@@ -62,14 +62,13 @@ form{
   height: fit-content;
   flex-direction: column-reverse;
   padding: 10px;
-  border-top: 1px solid #454440;
 }
  
 textarea{
   min-height: 30px;
   width: fill;
   border: solid transparent;
-  border-bottom: solid 1px #646669;
+  border-bottom: solid 2px #646669;
   color: white;
   background-color: transparent;
   outline: transparent;
@@ -79,7 +78,7 @@ textarea{
 }
 
 textarea.active{
-  border-bottom-color: #eb3131;
+  border-bottom-color: rgb(68, 109, 68);
 }
 
 textarea::-webkit-scrollbar{
@@ -134,7 +133,6 @@ textarea:focus {
   display: flex;
   flex-direction: column-reverse;
   height: 55vh;
-  border-top: 1px solid #454440;
 }
 
 #chat::-webkit-scrollbar{
@@ -175,6 +173,19 @@ textarea:focus {
 
 }
 
+#expandOrNot{
+  width: 3.5vh; 
+  height: 3.5vh;
+  border-radius: 100%;
+  border: solid 2px #454440;
+  background-color: transparent;
+  margin-left: calc(100% - 7vh);
+  justify-content: center;
+  color: white;
+  transition: border-color 0.3s ease-out;
+  transition: color 0.2s ease-out;
+  text-align: center;
+}
 #fakeEnter{
   width: 7vh; 
   height: 4vh;
@@ -208,6 +219,7 @@ textarea:focus {
   font-size: 100%;
   padding: 5px;
   border: solid 1px #eb8042;
+  background-color: rgb(0,0,0, 0.6);
 }
 
 
@@ -224,6 +236,7 @@ textarea:focus {
   padding: 5px;
   border: solid 1px #c85de3;
   flex-direction: row-reverse;
+  background-color: rgb(0,0,0, 0.6);
 }
 
 .chatDialogue{
@@ -242,6 +255,7 @@ textarea:focus {
 .chatDialogue.reply{
   display: flex;
   flex-direction: row-reverse;
+  
 }
 
 

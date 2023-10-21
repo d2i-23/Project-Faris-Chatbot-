@@ -23,8 +23,10 @@ declare namespace Live2DCubismCore {
     const MocVersion_33: number;
     /** .moc3 file version 4.0.00 - 4.1.05 */
     const MocVersion_40: number;
-    /** .moc3 file version 4.2.00 - */
+    /** .moc3 file version 4.2.00 - 4.2.04 */
     const MocVersion_42: number;
+    /** .moc3 file version 5.0.00 - */
+    const MocVersion_50: number;
     /** Normal Parameter. */
     const ParameterType_Normal: number;
     /** Parameter for blend shape. */

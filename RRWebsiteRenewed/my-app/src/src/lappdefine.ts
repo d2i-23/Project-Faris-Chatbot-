@@ -45,8 +45,8 @@ export const PowerImageName = 'CloseNormal.png';
 // モデルを配置したディレクトリ名の配列
 // ディレクトリ名とmodel3.jsonの名前を一致させておくこと
 export const ModelDir: string[] = [
-  'Mao'
-];
+  'vtuber hood on'
+];//
 export const ModelDirSize: number = ModelDir.length;
 
 // 外部定義ファイル（json）と合わせる

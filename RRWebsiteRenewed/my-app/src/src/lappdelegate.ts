@@ -355,10 +355,10 @@ function onMouseMoved(e: MouseEvent): void {
   //const posX: number = e.clientX - rect.left;
   //const posY: number = e.clientY - rect.top;
 
-  let posX: number = e.clientX;
+  let posX: number = e.clientX 
   let posY: number = e.clientY - window.innerHeight + canvas.height;
 
-  posX = (posX > canvas.width) ? canvas.width: posX;
+  posX = (posX < 0) ? 0: posX//(posX > canvas.width) ? canvas.width: posX;
   posY = (posY < 0) ? 0: posY;
 
   LAppDelegate.getInstance()._view.onTouchesMoved(posX, posY);

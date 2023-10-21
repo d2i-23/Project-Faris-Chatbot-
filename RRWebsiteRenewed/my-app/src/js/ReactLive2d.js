@@ -5,17 +5,12 @@ function ReactLive2d(props) {
 
     // 容器样式
     let containerStyle = {
-        position: 'fixed',
-        top: props.top ? props.top : '0',
-        bottom: props.bottom ? props.bottom : '0',
-        left: `calc(60% - ${props.width})`
+        position: 'relative',//props.bottom ? props.bottom : '0',
     }
     // canvas样式
     let canvasStyle = {
-        position: 'relative',
         top: props.top ? props.top : '',
         right: props.right ? props.right : '0',
-        bottom: props.bottom ? props.bottom : '0',
         left: props.left ? props.left : ''
     }
 
@@ -97,7 +92,7 @@ function ReactLive2d(props) {
                     id="live2d"
                     style={canvasStyle}
                     width={props.width ? props.width : '300'}
-                    height={props.height ? props.height : '500'}
+                    height={props.height - 100? props.height : '500'}
                     className="live2d"
                 >
                 </canvas>
