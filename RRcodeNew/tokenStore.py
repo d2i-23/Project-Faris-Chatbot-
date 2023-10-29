@@ -1,3 +1,3 @@
 
-GptToken = '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'
+GptToken = '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'
 speech_key = "eaeace6a8dac451684b642d74950ab24"

@@ -18,7 +18,6 @@ function Chat(){
   const [active, isActive] = useState(false);
   const [realMessage, needResponse] = useState(false)
   const chatboxRef = useRef(null)
-  const [expandChat, expand] = useState(true)
 
   useEffect(() => {console.log('here'); console.log(sentMemory)}, [sentMemory])
   
@@ -132,30 +131,22 @@ function Chat(){
     } }, [chatHTML]);
 
   useEffect(() => {chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight}, [assistantHTML])
-  //<button id = 'voiceInput'>hi</button>
-
-  useEffect(() => {}, [expandChat])
+  
 
   return (
 
     <div class = "overallContainer"> 
       
-      <div class = 'chatBox' style = {{visibility: expandChat ? "visible" : "hidden"}}>
-      <br></br><br></br>
-          <form onSubmit = {setMessage} style = {{visibility: "visible"}}>
-          
-            <div style = {{"display": "flex", marginLeft: "80%"}}> 
-            <div id = 'expandOrNot' style = {{margin: 5, background: "rgb(0, 0, 0, 0.6)", "border": expandChat ? "solid 2px #eb8042" : "solid 2px #c85de3" }} onClick = {() => {expand(!expandChat)}}></div>
-            {chatHTML.length == assistantHTML.length ? <button id = 'chatEnter' type = 'submit' style = {{margin: 5, background: "rgb(0, 0, 0, 0.6)"}}> >>></button> : <button id = 'fakeEnter' type = 'button' style = {{margin: 5, background: "rgb(0, 0, 0, 0.6)"}}>...</button>}
-            </div>
-            <br></br>
+      <div class = 'chatBox'>
+          <br></br>
+          <form onSubmit = {setMessage} >
+            {chatHTML.length == assistantHTML.length ? <button id = 'chatEnter' type = 'submit'>>>></button> : <button id = 'fakeEnter' type = 'button'>...</button>}
+            <br/>
             <textarea class = {active ? 'active' : ''} onChange = {addKeyStroke} onKeyDown = {detectEnter}type = "text" id = 'messageBox' ></textarea> 
 
           </form>
-          
           <div id = 'chatBorderTop'>
-
-          <div id = 'chat' ref = {chatboxRef} >  
+          <div id = 'chat' ref = {chatboxRef}>  
             {chatHTML.map((items, index) => (
             <div class = "chatDialogue">
               <div class = "timeStampInclude">{chatHTML[index]['date']} | {chatHTML[index]['time']}
@@ -177,21 +168,18 @@ function Chat(){
           
           </div>
           <br></br>
-
+          <h2 class = {active ? 'active' : ''} >Live Chat</h2>
         </div>
         
-        <div style = {{height: 900, width: 600, overflow: "hidden"}}>
-        <ReactLive2d 
+
+        <div class = "AnimationBox" ><ReactLive2d 
         token =  {`${assistantHTML.length !== 0 ? assistantHTML[assistantHTML.length - 1]['token']: ''}`}
         mood = {`${assistantHTML.length !== 0 ? assistantHTML[assistantHTML.length - 1]['mood']: ''}`}
         time = {`${assistantHTML.length !== 0 ? assistantHTML[assistantHTML.length - 1]['time']: ''}`}
-        width={600} 
-        height={1700}
-        top = {0}/>
-
+        width={1000} 
+        height={1400}
+        top = {2}/>
         </div>
-
-
     </div>
 
   )
