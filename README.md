@@ -3,7 +3,6 @@ RR project for the system containing Faris. Faris Is an AI chatbot powered by Ch
 * Web search capabilities 
 * Mobile Support
 * Voice input
-* New ai model (the current one is one of the default models from Live2D)
 * Memory System (as in refering to conversations in the past)
 
 Preview of Website:
