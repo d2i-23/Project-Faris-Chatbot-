@@ -9,7 +9,8 @@ RR project for the system containing Faris. Faris Is an AI chatbot powered by Ch
 Preview of Website:
 
 
-![image](https://github.com/d2i-23/RR-Project-Faris-Chatbot-/assets/122646162/a670fd8e-dbcd-4506-8785-1d86ec4698a4)
+![image](https://github.com/d2i-23/RR-Project-Faris-Chatbot-/assets/122646162/19ff47cf-1231-4a26-a95c-a38654b30850)
+
 
 
 
