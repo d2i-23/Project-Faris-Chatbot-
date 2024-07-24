@@ -1,4 +1,4 @@
-RR project for the system containing Faris. Faris Is an AI chatbot powered by ChatGPT 3.5 and Live2D Web SDK paired with the React Framework. As of now, it can talk to the about typical conversations and answer questions like you would expect from ChatGPT. I've also given it the ability to display code. Here are the current goals for this ai:
+THe Faris project for the system containing Faris. Faris Is an AI chatbot powered by ChatGPT 3.5 and Live2D Web SDK paired with the React Framework. As of now, it can talk to the about typical conversations and answer questions like you would expect from ChatGPT. I've also given it the ability to display code. Here are the current goals for this ai:
 
 * Web search capabilities 
 * Mobile Support
